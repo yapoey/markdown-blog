@@ -9,7 +9,6 @@ const getPostContent = (slug: string, folder: string) => {
   const file = `${folder}/${slug}.md`;
   const content = fs.readFileSync(file, "utf8");
   const matterResult = matter(content);
-  console.log(matterResult);
   return matterResult;
 };
 
@@ -21,25 +20,23 @@ const getTitlesFromText = (text: string) => {
   while ((match = regex.exec(text)) !== null) {
     matches.push(match[1].trim());
   }
-
-  console.log(matches);
   return matches;
 };
 
-export const generateStaticParams = async () => {
-  const postPreview = getPostMetaData();
-  const slugs: string[] = [];
-  Object.keys(postPreview).forEach((key: string) =>
-    postPreview[key].forEach((post: PostMetaData) => {
-      slugs.push(post.slug);
-    })
-  );
+// export const generateStaticParams = async () => {
+//   const postPreview = getPostMetaData();
+//   const slugs: string[] = [];
+//   Object.keys(postPreview).forEach((key: string) =>
+//     postPreview[key].forEach((post: PostMetaData) => {
+//       slugs.push(post.slug);
+//     })
+//   );
 
-  // return posts.map((post) => ({
-  //   slug: post.slug,
-  // }));
-  return slugs;
-};
+//   // return posts.map((post) => ({
+//   //   slug: post.slug,
+//   // }));
+//   return slugs;
+// };
 
 export default function posts(props: any) {
   const slug = props.params.slug;
