@@ -23,20 +23,19 @@ const getTitlesFromText = (text: string) => {
   return matches;
 };
 
-// export const generateStaticParams = async () => {
-//   const postPreview = getPostMetaData();
-//   const slugs: string[] = [];
-//   Object.keys(postPreview).forEach((key: string) =>
-//     postPreview[key].forEach((post: PostMetaData) => {
-//       slugs.push(post.slug);
-//     })
-//   );
+export const generateStaticParams = async () => {
+  const postPreview = getPostMetaData();
+  const slugs: string[] = [];
+  Object.keys(postPreview).forEach((key: string) =>
+    postPreview[key].forEach((post: PostMetaData) => {
+      slugs.push(post.slug);
+    })
+  );
 
-//   // return posts.map((post) => ({
-//   //   slug: post.slug,
-//   // }));
-//   return slugs;
-// };
+  return slugs.map((post) => ({
+    slug: post,
+  }));
+};
 
 export default function posts(props: any) {
   const slug = props.params.slug;
