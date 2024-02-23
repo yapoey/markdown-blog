@@ -1,6 +1,7 @@
 import { PostMetaData } from "@/interface/PostMetaData";
 import Link from "next/link";
 import getPostMetaData from "@/util/getPostMetadata";
+
 export default function Home() {
   const postMetaData = getPostMetaData();
 

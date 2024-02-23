@@ -1,8 +1,9 @@
 import fs from "fs";
-import Markdown from "markdown-to-jsx";
 import matter from "gray-matter";
 import getPostMetaData from "@/util/getPostMetadata";
 import DocContentNav from "@/components/DocContentNav";
+import DocContentItem from "@/components/DocCententItem";
+import MarkdowContent from "@/components/MarkdowContent";
 import { PostMetaData } from "@/interface/PostMetaData";
 
 const getPostContent = (slug: string, folder: string) => {
@@ -13,12 +14,11 @@ const getPostContent = (slug: string, folder: string) => {
 };
 
 const getTitlesFromText = (text: string) => {
-  const regex = /(?:^|##?\s)([^#\n]+)/g;
-
-  let matches = [];
+  const headerRegex = /^(#+)\s*(.*)/gm;
+  const matches = [];
   let match;
-  while ((match = regex.exec(text)) !== null) {
-    matches.push(match[1].trim());
+  while ((match = headerRegex.exec(text)) !== null) {
+    matches.push({ level: match[1].length, text: match[2] });
   }
   return matches;
 };
@@ -31,7 +31,6 @@ export const generateStaticParams = async () => {
       slugs.push(post.slug);
     })
   );
-
   return slugs.map((post) => ({
     slug: post,
   }));
@@ -42,17 +41,6 @@ export default function posts(props: any) {
   const folder = props.searchParams.folder;
   const matterResult = getPostContent(slug, folder);
   const titles = getTitlesFromText(matterResult.content);
-
-  const handleOnTitle = (title: string) => {
-    const stringWithHyphen = title.split(" ").join("-").toLowerCase();
-    const element = document.getElementById(stringWithHyphen);
-
-    if (element !== null) {
-      element.scrollIntoView({ behavior: "smooth" });
-    } else {
-      console.error(`Element with id '${stringWithHyphen}' not found.`);
-    }
-  };
 
   return (
     <section className="flex">
@@ -68,15 +56,13 @@ export default function posts(props: any) {
         </article>
 
         <article className="prose lg:prose-xl">
-          <Markdown>{matterResult.content}</Markdown>
+          <MarkdowContent>{matterResult.content}</MarkdowContent>
         </article>
       </div>
       <DocContentNav>
         <ul>
           {titles.map((title) => (
-            <li className="hover:underline mb-4 text-sm text-slate-300 cursor-pointer">
-              {title}
-            </li>
+            <DocContentItem title={title} />
           ))}
         </ul>
       </DocContentNav>
